@@ -1,0 +1,6 @@
+{
+  "name": "SWASS",
+  "description": "PSP (Payment Service Provider) transfronterizo en México. Procesamiento integral de pagos, checkout multi-moneda, adquirencia local y dispersión instantánea para empresas globales.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
