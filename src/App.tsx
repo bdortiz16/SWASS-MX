@@ -46,11 +46,18 @@ export default function App() {
   ]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeCoreOp, setActiveCoreOp] = useState<'idle' | 'liq' | 'fraud' | 'split' | 'webhook'>('idle');
-  const [homeSubTab, setHomeSubTab] = useState<'arcade' | 'sandbox'>('arcade');
 
   // Key listening for deck navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        document.activeElement?.tagName === 'INPUT' || 
+        document.activeElement?.tagName === 'TEXTAREA' ||
+        activeTab === 0
+      ) {
+        return;
+      }
+
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         setActiveTab((prev) => Math.min(prev + 1, 3));
       } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
@@ -59,7 +66,7 @@ export default function App() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [activeTab]);
 
   // Update rates simulation
   useEffect(() => {
@@ -136,15 +143,15 @@ export default function App() {
           {/* Desktop Nav Items */}
           <nav className="hidden md:flex items-center gap-1.5 bg-zinc-50 border border-zinc-200/80 rounded-full p-1 shadow-2xs">
             {[
-              { id: 0, label: "01 // SOLUCIÓN PSP" },
-              { id: 1, label: "02 // COMPARAR TARIFAS" },
-              { id: 2, label: "03 // API & INGENIERÍA" },
+              { id: 0, label: "01 // SOLUCIÓN" },
+              { id: 1, label: "02 // TARIFAS" },
+              { id: 2, label: "03 // INGENIERÍA" },
               { id: 3, label: "04 // AGENDAR REUNIÓN" }
             ].map((tab) => (
               <button
                 key={tab.id}
                 type="button"
-                className={`px-4.5 py-1.5 rounded-full font-mono text-[10px] font-bold tracking-wider transition-all ${
+                className={`px-4 py-1.5 rounded-full font-mono text-[9px] lg:text-[10px] font-bold tracking-wider transition-all ${
                   activeTab === tab.id 
                     ? 'bg-white text-emerald-600 border border-zinc-200/60 shadow-xs' 
                     : 'text-zinc-500 hover:text-zinc-900 border border-transparent'
@@ -164,10 +171,10 @@ export default function App() {
             <button
               type="button"
               onClick={handleBookRedirect}
-              className="px-5 py-2.5 bg-zinc-900 hover:bg-zinc-800 rounded-full font-display text-xs font-bold uppercase tracking-wider text-white transition-all flex items-center gap-2 shadow-xs cursor-pointer"
+              className="px-5 py-2.5 bg-zinc-900 hover:bg-zinc-800 rounded-full font-display text-xs font-bold uppercase tracking-wider text-white transition-all flex items-center gap-2 shadow-xs cursor-pointer hover:scale-[1.02]"
             >
-              <PhoneCall className="w-3.5 h-3.5 text-emerald-400" />
-              Solicitar Integración
+              <Calendar className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+              Agendar de Una
             </button>
           </div>
 
@@ -192,9 +199,9 @@ export default function App() {
             className="md:hidden border-b border-zinc-200 bg-white p-4 absolute left-0 right-0 z-30 flex flex-col gap-3 font-mono text-xs shadow-md"
           >
             {[
-              { id: 0, label: "01 // SOLUCIÓN PSP" },
-              { id: 1, label: "02 // COMPARAR TARIFAS" },
-              { id: 2, label: "03 // API & INGENIERÍA" },
+              { id: 0, label: "01 // SOLUCIÓN" },
+              { id: 1, label: "02 // TARIFAS" },
+              { id: 2, label: "03 // INGENIERÍA" },
               { id: 3, label: "04 // AGENDAR REUNIÓN" }
             ].map((tab) => (
               <button
@@ -202,7 +209,7 @@ export default function App() {
                 type="button"
                 className={`py-2 px-3 text-left rounded-lg transition-colors font-bold ${
                   activeTab === tab.id 
-                    ? 'bg-zinc-55/60 text-emerald-600 font-extrabold' 
+                    ? 'bg-zinc-100 text-emerald-600 font-extrabold' 
                     : 'text-zinc-500 hover:text-zinc-900'
                 }`}
                 onClick={() => {
@@ -223,7 +230,7 @@ export default function App() {
               }}
               className="w-full text-center py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-display font-bold uppercase tracking-wider rounded-lg text-xs"
             >
-              Agendar Demo Corporativa
+              Agendar de Una con David
             </button>
           </motion.div>
         )}
@@ -239,230 +246,69 @@ export default function App() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.4 }}
-              className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
+              className="space-y-12"
             >
-              {/* Left Column: Slogan, Value Pitch, and Custom Sandbox Console */}
-              <div className="lg:col-span-6 space-y-6">
-                <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-50 border border-emerald-250/90 rounded-full font-mono text-[10px] text-emerald-700 font-extrabold tracking-widest uppercase shadow-2xs">
-                  <Globe2 className="w-3.5 h-3.5 animate-spin-slow text-emerald-600" />
-                  MÉXICO MERCHANT SERVICE PSP
+              {/* Top Hero Layout: Pitch on Left, CoreRing Interactive Diagram on Right */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                <div className="lg:col-span-7 space-y-6">
+                  <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-50 border border-emerald-250/90 rounded-full font-mono text-[10px] text-emerald-700 font-extrabold tracking-widest uppercase shadow-2xs">
+                    <Globe2 className="w-3.5 h-3.5 animate-spin-slow text-emerald-600" />
+                    MÉXICO MERCHANT SERVICE PSP
+                  </div>
+
+                  <h1 className="font-display text-4xl sm:text-5xl lg:text-5.5xl font-extrabold text-zinc-900 tracking-tight leading-tight">
+                    No es solo una pasarela.<br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-500">
+                      Es Ingeniería Core.
+                    </span>
+                  </h1>
+
+                  <p className="text-zinc-650 text-sm md:text-base leading-relaxed max-w-xl font-sans">
+                    Bypass a los obsoletos agregadores internacionales de tarjetas. SWASS te provee de adquirencia local de alto rendimiento con splits automáticos y dispersión directa por SPEI.
+                  </p>
+
+                  <div className="flex flex-wrap gap-4 items-center pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab(1)}
+                      className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-display text-xs font-bold uppercase tracking-wider shadow-sm hover:scale-[1.015] transition-all flex items-center gap-1.5 cursor-pointer"
+                    >
+                      Comparar Comisiones
+                      <ArrowRight className="w-4 h-4 text-emerald-100" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleBookRedirect}
+                      className="px-6 py-3 border border-zinc-200 hover:border-zinc-350 hover:bg-zinc-50 rounded-xl font-display text-xs font-bold uppercase tracking-wider text-zinc-650 hover:text-zinc-900 transition-all cursor-pointer"
+                    >
+                      Agendar Demo Técnica
+                    </button>
+                  </div>
                 </div>
 
-                <h1 className="font-display text-4xl sm:text-5xl lg:text-5.5xl font-extrabold text-zinc-900 tracking-tight leading-tight">
-                  No es solo una pasarela.<br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-emerald-700 to-emerald-500">
-                    Es Ingeniería Core.
-                  </span>
-                </h1>
-
-                <p className="text-zinc-650 text-sm md:text-base leading-relaxed max-w-xl font-sans">
-                  Bypass a los obsoletos agregadores internacionales de tarjetas. SWASS te provee de adquirencia local de alto rendimiento con splits automáticos y dispersión directa por SPEI.
-                </p>
-
-                {/* SWASS Interactive Mode Select Switch */}
-                <div className="flex items-center gap-1.5 p-1 bg-zinc-100 rounded-xl border border-zinc-200/95 max-w-xs mb-1">
-                  <button
-                    type="button"
-                    onClick={() => setHomeSubTab('arcade')}
-                    className={`flex-1 py-2 text-center rounded-lg font-mono text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1 cursor-pointer ${
-                      homeSubTab === 'arcade'
-                        ? 'bg-white text-emerald-700 shadow-2xs'
-                        : 'text-zinc-500 hover:text-zinc-800'
-                    }`}
-                  >
-                    <span>🎮 CACTUS ARCADE</span>
-                    <span className="px-1 py-0.2 bg-emerald-100 text-emerald-800 text-[8px] rounded font-black">NUEVO</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setHomeSubTab('sandbox')}
-                    className={`flex-1 py-2 text-center rounded-lg font-mono text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1 cursor-pointer ${
-                      homeSubTab === 'sandbox'
-                        ? 'bg-white text-zinc-800 shadow-2xs'
-                        : 'text-zinc-500 hover:text-zinc-805'
-                    }`}
-                  >
-                    <span>⚙️ CONSOLA API</span>
-                  </button>
-                </div>
-
-                <AnimatePresence mode="wait">
-                  {homeSubTab === 'arcade' ? (
-                    <motion.div
-                      key="arcade-game-view"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.25 }}
-                    >
-                      <CactusAdventureGame />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="sandbox-terminal-view"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.25 }}
-                      className="bg-white p-5 rounded-2xl border border-zinc-200/90 shadow-xs space-y-4"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-[10px] text-zinc-500 uppercase tracking-widest flex items-center gap-1.5 font-bold">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                          ESTUDIO DE INTEGRACIÓN API
-                        </span>
-                        <span className="font-mono text-[9px] text-zinc-500 bg-zinc-50 px-2 py-0.5 rounded border border-zinc-200 font-bold shadow-2xs">
-                          SANDBOX ACTIVO
-                        </span>
-                      </div>
-
-                      {/* Operational selection pill-grid */}
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                        {[
-                          { id: 'liq', label: 'Liquidación SPEI', icon: <Zap className="w-3.5 h-3.5 text-emerald-600" /> },
-                          { id: 'fraud', label: 'Antifraude 3DS2', icon: <ShieldCheck className="w-3.5 h-3.5 text-amber-600" /> },
-                          { id: 'split', label: 'Split API', icon: <Layers className="w-3.5 h-3.5 text-cyan-600" /> },
-                          { id: 'webhook', label: 'Webhook POST', icon: <Code className="w-3.5 h-3.5 text-fuchsia-600" /> }
-                        ].map((op) => (
-                          <button
-                            key={op.id}
-                            type="button"
-                            onClick={() => setActiveCoreOp(activeCoreOp === op.id ? 'idle' : (op.id as any))}
-                            className={`py-2 px-2.5 rounded-xl border text-[10.5px] font-mono tracking-wide flex flex-col items-center gap-1.5 transition-all duration-350 cursor-pointer ${
-                              activeCoreOp === op.id 
-                                ? 'bg-emerald-50 border-emerald-500 text-emerald-800 font-extrabold shadow-sm scale-[1.03]' 
-                                : 'bg-white border-zinc-200 hover:border-zinc-350 text-zinc-500 hover:text-zinc-900'
-                            }`}
-                          >
-                            {op.icon}
-                            <span>{op.label}</span>
-                          </button>
-                        ))}
-                      </div>
-
-                      {/* Sandbox Shell Output / JSON Telemetry Panel (Styled as ultra pristine light theme developer window) */}
-                      <div className="bg-zinc-55/70 rounded-xl p-4 border border-zinc-200/80 font-mono text-[11px] overflow-hidden">
-                        {(() => {
-                          const log = (() => {
-                            switch (activeCoreOp) {
-                              case 'liq':
-                                return {
-                                  event: "SPEI_SETTLEMENT_CORE",
-                                  status: "200 OK",
-                                  desc: "Dispersión instantánea mandada a cuenta CLABE local (BBVA). Tiempo de compensación: 14.2 segundos con número de rastreo BANXICO STP.",
-                                  json: `{
-  "gateway_action": "instant_liquidation",
-  "bank_destination": "MX_CLABE_BANXICO",
-  "amount_usd": 150000.00,
-  "exchange_rate": 16.8520,
-  "net_mxn_delivered": 2527800.00,
-  "spei_tracking_folio": "STP-98481024",
-  "clearing_time_secs": 14.2
-}`
-                                };
-                              case 'fraud':
-                                return {
-                                  event: "3DS_ANTIFRAUDE_AUDIT",
-                                  status: "3DS 2.0 VERIFIED",
-                                  desc: "Análisis biométrico y de dispositivo preventivo completado. Cero riesgos detectados en tarjetas Visa/Mastercard internacionales.",
-                                  json: `{
-  "fraud_check": "3d_secure_protocol_2",
-  "device_fingerprint": "dev_9x48fhn2",
-  "behavioral_score": 0.992,
-  "card_issuer_country": "USA_DEBIT",
-  "status": "APPROVED",
-  "chargeback_liability": "MERCHANT_SHIELDED"
-}`
-                                };
-                              case 'split':
-                                return {
-                                  event: "SPLIT_PAY_ROUTING",
-                                  status: "RESOLVED",
-                                  desc: "División del ticket de compra realizada de manera automática. Retiros procesados a cuentas secundarias de distribuidores locales.",
-                                  json: `{
-  "split_automation": "dynamic_splits",
-  "distribution": {
-    "primary_merchant_pct": 85.50,
-    "platform_fee_pct": 3.00,
-    "collaborator_payout_pct": 11.50
-  },
-  "spei_routing_ids": ["TX_SPLIT_01", "TX_SPLIT_02"],
-  "reconciliation_status": "AUTO_MATCHED"
-}`
-                                };
-                              case 'webhook':
-                                return {
-                                  event: "WEBHOOK_EVENT_DISPATCH",
-                                  status: "DELIVERED [HTTP 200]",
-                                  desc: "Notificación segura de pago completado enviada al ERP integrado del cliente. Cero demoras en reintentos.",
-                                  json: `{
-  "delivery_id": "wh_84812",
-  "target_endpoint": "https://api.merchant.com/v1/webhooks",
-  "event_type": "payment_intent.succeeded",
-  "retry_count": 0,
-  "http_response_code": 200,
-  "delivery_latency_ms": 42
-}`
-                                };
-                              case 'idle':
-                              default:
-                                return {
-                                  event: "GATEWAY_STANDBY",
-                                  status: "ONLINE",
-                                  desc: "Presiona cualquiera de los módulos adquirentes arriba para disparar el simulador de API y ver la respuesta en tiempo real.",
-                                  json: `{
-  "system_status": "ONLINE",
-  "environment": "SANDBOX_MÉXICO",
-  "active_nodes": ["CDMX_CORE", "QRO_BACKUP"],
-  "response_latency_ms": 0.042,
-  "documentation": "https://swass.mx/docs/api"
-}`
-                                };
-                            }
-                          })();
-
-                          return (
-                            <div className="space-y-2">
-                              <div className="flex justify-between border-b border-zinc-200 pb-1 text-zinc-400 font-extrabold text-[9px] uppercase tracking-wider">
-                                <span>EVENT: {log.event}</span>
-                                <span className={activeCoreOp === 'idle' ? 'text-zinc-500' : 'text-emerald-600 font-extrabold'}>{log.status}</span>
-                              </div>
-                              <p className="text-zinc-650 leading-normal text-[10.5px]">
-                                {log.desc}
-                              </p>
-                              <pre className="text-zinc-800 max-h-36 overflow-y-auto scrollbar-thin text-[9.5px] leading-relaxed p-2.5 bg-white border border-zinc-150 rounded-lg shadow-2xs">
-                                {log.json}
-                              </pre>
-                            </div>
-                          );
-                        })()}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                <div className="flex flex-wrap gap-4 items-center pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab(1)}
-                    className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-display text-xs font-bold uppercase tracking-wider shadow-sm hover:scale-[1.015] transition-all flex items-center gap-1.5 cursor-pointer"
-                  >
-                    Comparar Comisiones
-                    <ArrowRight className="w-4 h-4 text-emerald-100" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleBookRedirect}
-                    className="px-6 py-3 border border-zinc-200 hover:border-zinc-350 hover:bg-zinc-50 rounded-xl font-display text-xs font-bold uppercase tracking-wider text-zinc-650 hover:text-zinc-900 transition-all cursor-pointer"
-                  >
-                    Agendar Demo Técnica
-                  </button>
+                {/* CoreRing representation */}
+                <div className="lg:col-span-5 flex items-center justify-center">
+                  <CoreRing activeOp={activeCoreOp} onTriggerOp={(op) => setActiveCoreOp(op)} />
                 </div>
               </div>
 
-              {/* Right Column: Dynamic Interactive CoreRing with custom responsive wrapper */}
-              <div className="lg:col-span-6 flex items-center justify-center">
-                <CoreRing activeOp={activeCoreOp} onTriggerOp={(op) => setActiveCoreOp(op)} />
+              {/* Centered Dedicated Game Zone: Full-Width 800px Container with Pristine Spacing */}
+              <div className="border-t border-zinc-100 pt-10 max-w-4xl mx-auto w-full">
+                <div className="text-center mb-6">
+                  <span className="px-3.5 py-1 bg-amber-50 border border-amber-200 rounded-full font-mono text-[9px] text-amber-805 font-extrabold tracking-widest uppercase">
+                    ⭐ CACTUS ARCADE INTEGRADO ⭐
+                  </span>
+                  <h2 className="text-xl md:text-2xl font-serif font-black text-amber-950 mt-2">
+                    Cactushead: El Duelo de Adquirencia México
+                  </h2>
+                  <p className="text-zinc-500 text-xs mt-1 max-w-md mx-auto">
+                    Esquiva la usura de los intermediarios y salva la liquidez local de las empresas mexicanas. ¡Haz "Parry" a las facturas magentas!
+                  </p>
+                </div>
+                
+                <div className="bg-amber-50/5/10 border border-zinc-200 rounded-2xl p-4 md:p-6 shadow-sm">
+                  <CactusAdventureGame />
+                </div>
               </div>
             </motion.div>
           )}
@@ -527,10 +373,10 @@ export default function App() {
             >
               {activeTab === idx && (
                 <span className="absolute right-7 -top-1 font-mono text-[9px] text-emerald-800 font-extrabold uppercase tracking-widest whitespace-nowrap bg-white border border-zinc-200 px-2 py-1 rounded shadow-2xs">
-                  {idx === 0 && "COBERTURA"}
-                  {idx === 1 && "AHORROS"}
+                  {idx === 0 && "SOLUCIÓN"}
+                  {idx === 1 && "TARIFAS"}
                   {idx === 2 && "PROPIEDADES"}
-                  {idx === 3 && "AGENDAR"}
+                  {idx === 3 && "AGENDAR DE UNA"}
                 </span>
               )}
             </button>

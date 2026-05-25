@@ -140,13 +140,13 @@ export default function MeetingScheduler() {
             <div className="text-center max-w-2xl mx-auto mb-8">
               <span className="font-mono text-xs text-emerald-600 bg-emerald-50 border border-emerald-100 px-3.5 py-1.5 rounded-full uppercase tracking-widest font-extrabold inline-flex items-center gap-1.5 shadow-xs">
                 <Sparkles className="w-3.5 h-3.5 text-emerald-600 fill-current" />
-                INTEGRACIÓN Y ADQUIRENCIA CORPORATIVA
+                CONEXIÓN DIRECTA SIN INTERMEDIARIOS
               </span>
               <h3 className="font-display text-2xl md:text-3xl font-extrabold text-zinc-900 mt-2.5">
-                Agenda tu sesión con un especialista de SWASS
+                Agenda de una sesión conmigo
               </h3>
-              <p className="text-zinc-550 text-xs md:text-sm mt-3 leading-relaxed font-sans">
-                Analizamos tu modelo de adquirencia, tasas de declinación, conciliaciones de impuestos por split API y te configuramos un entorno Sandbox o cuenta piloto de inmediato.
+              <p className="text-zinc-650 text-xs md:text-sm mt-3 leading-relaxed font-sans">
+                Seña una cita de 15 minutos en directo conmigo (David Ortiz, Lead Integrations) y nuestro equipo de ingeniería. Evaluamos tu modelo de adquirencia local, te ahorramos intermediarios y te habilitamos producción de inmediato.
               </p>
             </div>
 
@@ -344,9 +344,9 @@ export default function MeetingScheduler() {
             </div>
 
             <span className="font-mono text-xs text-emerald-600 tracking-widest uppercase font-extrabold">SESIÓN CONFIRMADA</span>
-            <h3 className="font-display text-2xl md:text-3xl font-extrabold text-zinc-900 mt-2">¡Todo listo para optimizar tus cobros y adquirencia!</h3>
+            <h3 className="font-display text-2xl md:text-3xl font-extrabold text-zinc-900 mt-2">¡Todo listo! Nos vemos en la reunión</h3>
             <p className="text-zinc-600 text-xs md:text-sm max-w-xl mx-auto mt-2 leading-relaxed font-sans">
-              Se ha reservado tu sesión técnica para configurar tu pasarela de adquirencia local y dar de alta tu Sandbox SWASS. Recibirás tu invitación de Google Meet y los accesos iniciales en breve.
+              He reservado tu sesión técnica de una vez conmigo. Recibirás de inmediato la invitación de Google Meet en tu correo y los accesos de inmediato para comenzar a trabajar juntos hoy mismo.
             </p>
 
             {/* Immersive Meeting Ticket style pass (Styled gorgeously with pure white punches that match are background canvas) */}
