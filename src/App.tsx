@@ -32,6 +32,8 @@ import CoreRing from './components/CoreRing';
 import TransactionSimulator from './components/TransactionSimulator';
 import MeetingScheduler from './components/MeetingScheduler';
 import BentoFeatures from './components/BentoFeatures';
+import CactusLogo from './components/CactusLogo';
+import CactusAdventureGame from './components/CactusAdventureGame';
 import { TickerRate } from './types';
 
 export default function App() {
@@ -44,6 +46,7 @@ export default function App() {
   ]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeCoreOp, setActiveCoreOp] = useState<'idle' | 'liq' | 'fraud' | 'split' | 'webhook'>('idle');
+  const [homeSubTab, setHomeSubTab] = useState<'arcade' | 'sandbox'>('arcade');
 
   // Key listening for deck navigation
   useEffect(() => {
@@ -123,11 +126,7 @@ export default function App() {
           
           {/* Logo brand */}
           <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => setActiveTab(0)}>
-            <div className="w-9 h-9 bg-gradient-to-tr from-emerald-600 to-emerald-400 rounded-xl p-[1px] shadow-2xs">
-              <div className="w-full h-full bg-white rounded-[11px] flex items-center justify-center font-display font-black text-sm text-emerald-650 tracking-widest">
-                S
-              </div>
-            </div>
+            <CactusLogo variant="emerald" size={38} className="hover:scale-[1.08] hover:rotate-6 transition-all duration-350" />
             <div>
               <span className="font-display font-black text-lg text-zinc-900 tracking-wider block">SWASS</span>
               <span className="font-mono text-[9px] text-zinc-400 font-extrabold block leading-none">PSP & ADQUIRENCIA MÉXICO</span>
@@ -260,53 +259,98 @@ export default function App() {
                   Bypass a los obsoletos agregadores internacionales de tarjetas. SWASS te provee de adquirencia local de alto rendimiento con splits automáticos y dispersión directa por SPEI.
                 </p>
 
-                {/* Live Sandbox Interactive Simulator Panel (Styled as beautiful clean whiteboard card) */}
-                <div className="bg-white p-5 rounded-2xl border border-zinc-200/90 shadow-xs space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-[10px] text-zinc-500 uppercase tracking-widest flex items-center gap-1.5 font-bold">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      ESTUDIO DE INTEGRACIÓN API
-                    </span>
-                    <span className="font-mono text-[9px] text-zinc-500 bg-zinc-50 px-2 py-0.5 rounded border border-zinc-200 font-bold shadow-2xs">
-                      SANDBOX ACTIVO
-                    </span>
-                  </div>
+                {/* SWASS Interactive Mode Select Switch */}
+                <div className="flex items-center gap-1.5 p-1 bg-zinc-100 rounded-xl border border-zinc-200/95 max-w-xs mb-1">
+                  <button
+                    type="button"
+                    onClick={() => setHomeSubTab('arcade')}
+                    className={`flex-1 py-2 text-center rounded-lg font-mono text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1 cursor-pointer ${
+                      homeSubTab === 'arcade'
+                        ? 'bg-white text-emerald-700 shadow-2xs'
+                        : 'text-zinc-500 hover:text-zinc-800'
+                    }`}
+                  >
+                    <span>🎮 CACTUS ARCADE</span>
+                    <span className="px-1 py-0.2 bg-emerald-100 text-emerald-800 text-[8px] rounded font-black">NUEVO</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setHomeSubTab('sandbox')}
+                    className={`flex-1 py-2 text-center rounded-lg font-mono text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1 cursor-pointer ${
+                      homeSubTab === 'sandbox'
+                        ? 'bg-white text-zinc-800 shadow-2xs'
+                        : 'text-zinc-500 hover:text-zinc-805'
+                    }`}
+                  >
+                    <span>⚙️ CONSOLA API</span>
+                  </button>
+                </div>
 
-                  {/* Operational selection pill-grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {[
-                      { id: 'liq', label: 'Liquidación SPEI', icon: <Zap className="w-3.5 h-3.5 text-emerald-600" /> },
-                      { id: 'fraud', label: 'Antifraude 3DS2', icon: <ShieldCheck className="w-3.5 h-3.5 text-amber-600" /> },
-                      { id: 'split', label: 'Split API', icon: <Layers className="w-3.5 h-3.5 text-cyan-600" /> },
-                      { id: 'webhook', label: 'Webhook POST', icon: <Code className="w-3.5 h-3.5 text-fuchsia-600" /> }
-                    ].map((op) => (
-                      <button
-                        key={op.id}
-                        type="button"
-                        onClick={() => setActiveCoreOp(activeCoreOp === op.id ? 'idle' : (op.id as any))}
-                        className={`py-2 px-2.5 rounded-xl border text-[10.5px] font-mono tracking-wide flex flex-col items-center gap-1.5 transition-all duration-350 cursor-pointer ${
-                          activeCoreOp === op.id 
-                            ? 'bg-emerald-50 border-emerald-500 text-emerald-800 font-extrabold shadow-sm scale-[1.03]' 
-                            : 'bg-white border-zinc-200 hover:border-zinc-350 text-zinc-500 hover:text-zinc-900'
-                        }`}
-                      >
-                        {op.icon}
-                        <span>{op.label}</span>
-                      </button>
-                    ))}
-                  </div>
+                <AnimatePresence mode="wait">
+                  {homeSubTab === 'arcade' ? (
+                    <motion.div
+                      key="arcade-game-view"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.25 }}
+                    >
+                      <CactusAdventureGame />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="sandbox-terminal-view"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.25 }}
+                      className="bg-white p-5 rounded-2xl border border-zinc-200/90 shadow-xs space-y-4"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-[10px] text-zinc-500 uppercase tracking-widest flex items-center gap-1.5 font-bold">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                          ESTUDIO DE INTEGRACIÓN API
+                        </span>
+                        <span className="font-mono text-[9px] text-zinc-500 bg-zinc-50 px-2 py-0.5 rounded border border-zinc-200 font-bold shadow-2xs">
+                          SANDBOX ACTIVO
+                        </span>
+                      </div>
 
-                  {/* Sandbox Shell Output / JSON Telemetry Panel (Styled as ultra pristine light theme developer window) */}
-                  <div className="bg-zinc-55/70 rounded-xl p-4 border border-zinc-200/80 font-mono text-[11px] overflow-hidden">
-                    {(() => {
-                      const log = (() => {
-                        switch (activeCoreOp) {
-                          case 'liq':
-                            return {
-                              event: "SPEI_SETTLEMENT_CORE",
-                              status: "200 OK",
-                              desc: "Dispersión instantánea mandada a cuenta CLABE local (BBVA). Tiempo de compensación: 14.2 segundos con número de rastreo BANXICO STP.",
-                              json: `{
+                      {/* Operational selection pill-grid */}
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        {[
+                          { id: 'liq', label: 'Liquidación SPEI', icon: <Zap className="w-3.5 h-3.5 text-emerald-600" /> },
+                          { id: 'fraud', label: 'Antifraude 3DS2', icon: <ShieldCheck className="w-3.5 h-3.5 text-amber-600" /> },
+                          { id: 'split', label: 'Split API', icon: <Layers className="w-3.5 h-3.5 text-cyan-600" /> },
+                          { id: 'webhook', label: 'Webhook POST', icon: <Code className="w-3.5 h-3.5 text-fuchsia-600" /> }
+                        ].map((op) => (
+                          <button
+                            key={op.id}
+                            type="button"
+                            onClick={() => setActiveCoreOp(activeCoreOp === op.id ? 'idle' : (op.id as any))}
+                            className={`py-2 px-2.5 rounded-xl border text-[10.5px] font-mono tracking-wide flex flex-col items-center gap-1.5 transition-all duration-350 cursor-pointer ${
+                              activeCoreOp === op.id 
+                                ? 'bg-emerald-50 border-emerald-500 text-emerald-800 font-extrabold shadow-sm scale-[1.03]' 
+                                : 'bg-white border-zinc-200 hover:border-zinc-350 text-zinc-500 hover:text-zinc-900'
+                            }`}
+                          >
+                            {op.icon}
+                            <span>{op.label}</span>
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Sandbox Shell Output / JSON Telemetry Panel (Styled as ultra pristine light theme developer window) */}
+                      <div className="bg-zinc-55/70 rounded-xl p-4 border border-zinc-200/80 font-mono text-[11px] overflow-hidden">
+                        {(() => {
+                          const log = (() => {
+                            switch (activeCoreOp) {
+                              case 'liq':
+                                return {
+                                  event: "SPEI_SETTLEMENT_CORE",
+                                  status: "200 OK",
+                                  desc: "Dispersión instantánea mandada a cuenta CLABE local (BBVA). Tiempo de compensación: 14.2 segundos con número de rastreo BANXICO STP.",
+                                  json: `{
   "gateway_action": "instant_liquidation",
   "bank_destination": "MX_CLABE_BANXICO",
   "amount_usd": 150000.00,
@@ -315,13 +359,13 @@ export default function App() {
   "spei_tracking_folio": "STP-98481024",
   "clearing_time_secs": 14.2
 }`
-                            };
-                          case 'fraud':
-                            return {
-                              event: "3DS_ANTIFRAUDE_AUDIT",
-                              status: "3DS 2.0 VERIFIED",
-                              desc: "Análisis biométrico y de dispositivo preventivo completado. Cero riesgos detectados en tarjetas Visa/Mastercard internacionales.",
-                              json: `{
+                                };
+                              case 'fraud':
+                                return {
+                                  event: "3DS_ANTIFRAUDE_AUDIT",
+                                  status: "3DS 2.0 VERIFIED",
+                                  desc: "Análisis biométrico y de dispositivo preventivo completado. Cero riesgos detectados en tarjetas Visa/Mastercard internacionales.",
+                                  json: `{
   "fraud_check": "3d_secure_protocol_2",
   "device_fingerprint": "dev_9x48fhn2",
   "behavioral_score": 0.992,
@@ -329,13 +373,13 @@ export default function App() {
   "status": "APPROVED",
   "chargeback_liability": "MERCHANT_SHIELDED"
 }`
-                            };
-                          case 'split':
-                            return {
-                              event: "SPLIT_PAY_ROUTING",
-                              status: "RESOLVED",
-                              desc: "División del ticket de compra realizada de manera automática. Retiros procesados a cuentas secundarias de distribuidores locales.",
-                              json: `{
+                                };
+                              case 'split':
+                                return {
+                                  event: "SPLIT_PAY_ROUTING",
+                                  status: "RESOLVED",
+                                  desc: "División del ticket de compra realizada de manera automática. Retiros procesados a cuentas secundarias de distribuidores locales.",
+                                  json: `{
   "split_automation": "dynamic_splits",
   "distribution": {
     "primary_merchant_pct": 85.50,
@@ -345,13 +389,13 @@ export default function App() {
   "spei_routing_ids": ["TX_SPLIT_01", "TX_SPLIT_02"],
   "reconciliation_status": "AUTO_MATCHED"
 }`
-                            };
-                          case 'webhook':
-                            return {
-                              event: "WEBHOOK_EVENT_DISPATCH",
-                              status: "DELIVERED [HTTP 200]",
-                              desc: "Notificación segura de pago completado enviada al ERP integrado del cliente. Cero demoras en reintentos.",
-                              json: `{
+                                };
+                              case 'webhook':
+                                return {
+                                  event: "WEBHOOK_EVENT_DISPATCH",
+                                  status: "DELIVERED [HTTP 200]",
+                                  desc: "Notificación segura de pago completado enviada al ERP integrado del cliente. Cero demoras en reintentos.",
+                                  json: `{
   "delivery_id": "wh_84812",
   "target_endpoint": "https://api.merchant.com/v1/webhooks",
   "event_type": "payment_intent.succeeded",
@@ -359,41 +403,43 @@ export default function App() {
   "http_response_code": 200,
   "delivery_latency_ms": 42
 }`
-                            };
-                          case 'idle':
-                          default:
-                            return {
-                              event: "GATEWAY_STANDBY",
-                              status: "ONLINE",
-                              desc: "Presiona cualquiera de los módulos adquirentes arriba para disparar el simulador de API y ver la respuesta en tiempo real.",
-                              json: `{
+                                };
+                              case 'idle':
+                              default:
+                                return {
+                                  event: "GATEWAY_STANDBY",
+                                  status: "ONLINE",
+                                  desc: "Presiona cualquiera de los módulos adquirentes arriba para disparar el simulador de API y ver la respuesta en tiempo real.",
+                                  json: `{
   "system_status": "ONLINE",
   "environment": "SANDBOX_MÉXICO",
   "active_nodes": ["CDMX_CORE", "QRO_BACKUP"],
   "response_latency_ms": 0.042,
   "documentation": "https://swass.mx/docs/api"
 }`
-                            };
-                        }
-                      })();
+                                };
+                            }
+                          })();
 
-                      return (
-                        <div className="space-y-2">
-                          <div className="flex justify-between border-b border-zinc-200 pb-1 text-zinc-400 font-extrabold text-[9px] uppercase tracking-wider">
-                            <span>EVENT: {log.event}</span>
-                            <span className={activeCoreOp === 'idle' ? 'text-zinc-500' : 'text-emerald-600 font-extrabold'}>{log.status}</span>
-                          </div>
-                          <p className="text-zinc-650 leading-normal text-[10.5px]">
-                            {log.desc}
-                          </p>
-                          <pre className="text-zinc-800 max-h-36 overflow-y-auto scrollbar-thin text-[9.5px] leading-relaxed p-2.5 bg-white border border-zinc-150 rounded-lg shadow-2xs">
-                            {log.json}
-                          </pre>
-                        </div>
-                      );
-                    })()}
-                  </div>
-                </div>
+                          return (
+                            <div className="space-y-2">
+                              <div className="flex justify-between border-b border-zinc-200 pb-1 text-zinc-400 font-extrabold text-[9px] uppercase tracking-wider">
+                                <span>EVENT: {log.event}</span>
+                                <span className={activeCoreOp === 'idle' ? 'text-zinc-500' : 'text-emerald-600 font-extrabold'}>{log.status}</span>
+                              </div>
+                              <p className="text-zinc-650 leading-normal text-[10.5px]">
+                                {log.desc}
+                              </p>
+                              <pre className="text-zinc-800 max-h-36 overflow-y-auto scrollbar-thin text-[9.5px] leading-relaxed p-2.5 bg-white border border-zinc-150 rounded-lg shadow-2xs">
+                                {log.json}
+                              </pre>
+                            </div>
+                          );
+                        })()}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 <div className="flex flex-wrap gap-4 items-center pt-2">
                   <button
@@ -547,9 +593,7 @@ export default function App() {
       <footer className="bg-zinc-50 py-12 border-t border-zinc-150">
         <div className="max-w-7xl mx-auto px-4 md:px-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-600 to-emerald-400 font-display font-black flex items-center justify-center text-white text-xs shadow-3xs">
-              S
-            </div>
+            <CactusLogo variant="emerald" size={32} />
             <div className="text-left">
               <span className="font-display font-extrabold text-zinc-900 text-sm tracking-wider block">SWASS INTERNATIONAL CO.</span>
               <span className="font-mono text-[9px] text-zinc-400 font-extrabold block">Socio tecnológico SPEI • Regulado bajo mejores prácticas</span>
