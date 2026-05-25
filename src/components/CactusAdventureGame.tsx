@@ -1489,19 +1489,19 @@ export default function CactusAdventureGame() {
             <div className="relative border-4 border-zinc-900 rounded-xl overflow-hidden bg-zinc-950 shadow-md">
               
               {/* Retro HUD overlay */}
-              <div className="absolute top-3 left-4 right-4 z-10 flex items-center justify-between pointer-events-none select-none">
+              <div className="relative md:absolute top-0 md:top-3 md:left-4 md:right-4 z-10 flex flex-row items-center justify-between gap-1.5 px-3 py-2.5 bg-zinc-900 md:bg-transparent border-b border-zinc-800 md:border-none select-none pointer-events-none">
                 
                 {/* Hearts / HP Display (Classic Cuphead design) */}
-                <div className="flex items-center gap-2 bg-black/45 border border-white/20 p-2-rounded rounded-lg backdrop-blur-xs font-mono">
-                  <span className="text-[10px] text-white font-black tracking-wider uppercase">HP:</span>
-                  <div className="flex gap-1">
+                <div className="flex items-center gap-1.5 bg-black/55 border border-white/10 px-2.5 py-1 rounded-lg backdrop-blur-xs font-mono">
+                  <span className="text-[9px] md:text-[10px] text-white font-black tracking-wider uppercase">HP:</span>
+                  <div className="flex gap-0.5 md:gap-1">
                     {Array.from({ length: 3 }).map((_, i) => (
                       <Heart 
                         key={i} 
-                        className={`w-5 h-5 transition-all ${
+                        className={`w-3.5 h-3.5 md:w-5 md:h-5 transition-all ${
                           i < currentHp 
                             ? 'text-red-500 fill-red-500 scale-110 drop-shadow-[0_0_6px_rgba(239,68,68,0.7)]' 
-                            : 'text-zinc-650 scale-90'
+                            : 'text-zinc-700 scale-90'
                         }`} 
                       />
                     ))}
@@ -1509,16 +1509,16 @@ export default function CactusAdventureGame() {
                 </div>
 
                 {/* Score display */}
-                <div className="text-right bg-black/45 border border-white/20 px-3 py-1 rounded-lg backdrop-blur-xs font-mono">
-                  <span className="text-[9px] text-zinc-400 block font-extrabold uppercase leading-none">SCORE</span>
-                  <span className="text-sm font-black text-yellow-300 font-mono tracking-widest">{playScore}</span>
+                <div className="text-right bg-black/55 border border-white/10 px-2 px-1.5 py-1 rounded-lg backdrop-blur-xs font-mono">
+                  <span className="text-[8px] md:text-[9px] text-zinc-400 block font-extrabold uppercase leading-none">SCORE</span>
+                  <span className="text-xs md:text-sm font-black text-yellow-300 font-mono tracking-widest">{playScore}</span>
                 </div>
 
                 {/* Super Meter (Stacked playing Cards) */}
-                <div className="bg-black/45 border border-white/20 px-3 py-1 rounded-lg backdrop-blur-xs font-mono flex items-center gap-2">
+                <div className="bg-black/55 border border-white/10 px-2 px-1.5 py-1 rounded-lg backdrop-blur-xs font-mono flex items-center gap-1 md:gap-2">
                   <div className="text-left">
-                    <span className="text-[8px] text-zinc-400 block font-extrabold leading-none uppercase">METER</span>
-                    <span className="text-[10.5px] font-black text-cyan-400 font-mono">{superMeter} %</span>
+                    <span className="text-[7.5px] md:text-[8px] text-zinc-400 block font-extrabold leading-none uppercase">METER</span>
+                    <span className="text-[9px] md:text-[10.5px] font-black text-cyan-400 font-mono">{superMeter}%</span>
                   </div>
                   
                   {/* Cards stacking visually */}
@@ -1529,7 +1529,7 @@ export default function CactusAdventureGame() {
                       return (
                         <div 
                           key={idx}
-                          className={`w-3.5 h-6 rounded border transition-all ${
+                          className={`w-2.5 h-4.5 md:w-3.5 md:h-6 rounded border transition-all ${
                             isLoaded 
                               ? 'bg-cyan-500 border-white font-extrabold scroll-py-0 text-white text-[8px] flex items-center justify-center scale-103 shadow-2xs rotate-2' 
                               : 'bg-zinc-800 border-zinc-650 opacity-40'
@@ -1540,27 +1540,6 @@ export default function CactusAdventureGame() {
                       );
                     })}
                   </div>
-                </div>
-              </div>
-
-              {/* Boss Stage HP Bar display at bottom center */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 w-full max-w-sm px-4 pointer-events-none select-none">
-                <div className="bg-black/60 border border-white/10 rounded-xl p-2 backdrop-blur-xs text-center">
-                  <div className="flex items-center justify-between text-[10px] font-mono text-zinc-300 font-extrabold uppercase mb-1">
-                    <span>😈 {bossPhases[bossPhaseIndex].name}</span>
-                    <span className="text-red-400">{bossHp} HP</span>
-                  </div>
-                  
-                  {/* Big healthy block meter */}
-                  <div className="w-full bg-zinc-805 h-3 rounded-md overflow-hidden relative border border-zinc-700">
-                    <motion.div 
-                      className="bg-gradient-to-r from-red-600 via-orange-500 to-yellow-500 h-full"
-                      animate={{ width: `${(bossHp / bossPhases[bossPhaseIndex].maxHp) * 100}%` }}
-                      transition={{ duration: 0.1 }}
-                    />
-                  </div>
-                  
-                  <span className="text-[9px] text-zinc-400 italic font-mono block mt-1">{bossPhases[bossPhaseIndex].subtitle}</span>
                 </div>
               </div>
 
@@ -1601,17 +1580,43 @@ export default function CactusAdventureGame() {
                 width={CANVAS_WIDTH}
                 height={CANVAS_HEIGHT}
                 tabIndex={0}
-                className="w-full h-auto block select-none bg-[#fdf6e2] cursor-crosshair outline-none focus:ring-4 focus:ring-amber-200/40 rounded-xl transition-all shadow-md"
+                className="w-full h-auto block select-none bg-[#fdf6e2] cursor-crosshair outline-none focus:ring-4 focus:ring-amber-200/40 rounded-t-none md:rounded-xl transition-all shadow-md"
                 onMouseDown={() => { 
                   keysPressed.current['mouse-is-down'] = true; 
                   try { window.focus(); canvasRef.current?.focus(); } catch(e) {}
                 }}
                 onMouseUp={() => { keysPressed.current['mouse-is-down'] = false; }}
                 onMouseLeave={() => { keysPressed.current['mouse-is-down'] = false; }}
+                onTouchStart={() => {
+                  keysPressed.current['mouse-is-down'] = true;
+                  try { window.focus(); canvasRef.current?.focus(); } catch(e) {}
+                }}
+                onTouchEnd={() => { keysPressed.current['mouse-is-down'] = false; }}
                 onClick={() => {
                   try { window.focus(); canvasRef.current?.focus(); } catch(e) {}
                 }}
               />
+
+              {/* Boss Stage HP Bar display at bottom center */}
+              <div className="relative md:absolute bottom-0 md:bottom-4 md:left-1/2 md:-translate-x-1/2 z-10 w-full md:max-w-sm px-3.5 py-2.5 bg-zinc-900 md:bg-black/60 border-t border-zinc-800 md:border md:border-white/10 md:rounded-xl text-center pointer-events-none select-none">
+                <div>
+                  <div className="flex items-center justify-between text-[9px] md:text-[10px] font-mono text-zinc-300 font-extrabold uppercase mb-1">
+                    <span>😈 {bossPhases[bossPhaseIndex].name}</span>
+                    <span className="text-red-400">{bossHp} HP</span>
+                  </div>
+                  
+                  {/* Big healthy block meter */}
+                  <div className="w-full bg-zinc-800 h-2 md:h-3 rounded-md overflow-hidden relative border border-zinc-700">
+                    <motion.div 
+                      className="bg-gradient-to-r from-red-600 via-orange-500 to-yellow-500 h-full"
+                      animate={{ width: `${(bossHp / bossPhases[bossPhaseIndex].maxHp) * 100}%` }}
+                      transition={{ duration: 0.1 }}
+                    />
+                  </div>
+                  
+                  <span className="text-[8px] md:text-[9px] text-zinc-400 italic font-mono block mt-1">{bossPhases[bossPhaseIndex].subtitle}</span>
+                </div>
+              </div>
 
             </div>
 
@@ -1632,12 +1637,14 @@ export default function CactusAdventureGame() {
                     type="button"
                     onMouseDown={() => { keysPressed.current['mouse-is-down'] = true; }}
                     onMouseUp={() => { keysPressed.current['mouse-is-down'] = false; }}
+                    onTouchStart={(e) => { e.preventDefault(); keysPressed.current['mouse-is-down'] = true; }}
+                    onTouchEnd={(e) => { e.preventDefault(); keysPressed.current['mouse-is-down'] = false; }}
                     className="py-2.5 px-1.5 rounded-xl border border-zinc-200 bg-white hover:bg-emerald-50 hover:border-emerald-500 text-center transition-all cursor-pointer"
                   >
                     <div className="flex flex-col items-center justify-center gap-1">
                       <Zap className="w-4 h-4 text-emerald-500 fill-emerald-100" />
                       <span className="font-display font-extrabold text-[10px] text-zinc-900 leading-none">Auto Disparo</span>
-                      <span className="text-[8px] text-zinc-400 font-mono">[Mantener Clic]</span>
+                      <span className="text-[8px] text-zinc-400 font-mono">[Mantener]</span>
                     </div>
                   </button>
 
@@ -1645,6 +1652,16 @@ export default function CactusAdventureGame() {
                     type="button"
                     onClick={() => {
                       // Trigger artificial jump trigger safely
+                      const p = playerRef.current;
+                      if (p.isGrounded) {
+                        p.vY = -12.5;
+                        p.isGrounded = false;
+                        playRetroSound('jump');
+                        spawnExplosionParticles(p.x + p.width/2, GROUND_Y, 'rgba(255, 255, 255, 0.45)', 6, 'smoke');
+                      }
+                    }}
+                    onTouchStart={(e) => {
+                      e.preventDefault();
                       const p = playerRef.current;
                       if (p.isGrounded) {
                         p.vY = -12.5;
@@ -1666,6 +1683,12 @@ export default function CactusAdventureGame() {
                     type="button"
                     disabled={superMeter < 20}
                     onClick={executeSpecialEx}
+                    onTouchStart={(e) => {
+                      if (superMeter >= 20) {
+                        e.preventDefault();
+                        executeSpecialEx();
+                      }
+                    }}
                     className="py-2.5 px-1.5 rounded-xl border border-dashed border-cyan-400 bg-white hover:bg-cyan-50 disabled:opacity-50 text-center transition-all cursor-pointer"
                   >
                     <div className="flex flex-col items-center justify-center gap-1">

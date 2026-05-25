@@ -98,12 +98,13 @@ export default function App() {
       {/* Upper Scrolling FX Rates Banner */}
       <div className="w-full bg-zinc-50 border-b border-zinc-150 py-2.5 overflow-hidden z-50">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-6 whitespace-nowrap text-[11px] font-mono">
-          <div className="flex items-center gap-2 text-emerald-600 font-extrabold">
+          <div className="flex items-center gap-2 text-emerald-600 font-extrabold flex-shrink-0">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
             </span>
-            <span className="tracking-wider uppercase font-extrabold text-[10px]">TIPO DE CAMBIO EN DIRECTO</span>
+            <span className="tracking-wider uppercase font-extrabold text-[10px] hidden sm:inline">TIPO DE CAMBIO EN DIRECTO</span>
+            <span className="tracking-wider uppercase font-extrabold text-[10px] sm:hidden">TC EN VIVO</span>
           </div>
           
           <div className="flex-1 overflow-hidden relative">
@@ -236,6 +237,34 @@ export default function App() {
         )}
       </AnimatePresence>
 
+      {/* Mobile Horizontal Section Navigator Stick */}
+      <div className="md:hidden bg-zinc-50/90 backdrop-blur-md border-b border-zinc-200 py-2.5 px-4 shadow-3xs overflow-x-auto scrollbar-none sticky top-16 z-30 flex items-center justify-center">
+        <div className="flex gap-2.5 w-full justify-between max-w-sm">
+          {[
+            { id: 0, label: "Solución" },
+            { id: 1, label: "Tarifas" },
+            { id: 2, label: "Ingeniería" },
+            { id: 3, label: "Agendar" }
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              className={`flex-1 text-center py-2 px-1.5 rounded-full font-mono text-[9px] font-bold tracking-wider transition-all whitespace-nowrap border ${
+                activeTab === tab.id 
+                  ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' 
+                  : 'bg-white text-zinc-500 border-zinc-150 hover:bg-zinc-50'
+              }`}
+              onClick={() => {
+                setActiveTab(tab.id);
+                if (tab.id === 3) handleBookRedirect();
+              }}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Main Interactive Presentation Show */}
       <main className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-16">
         <AnimatePresence mode="wait">
@@ -306,7 +335,7 @@ export default function App() {
                   </p>
                 </div>
                 
-                <div className="bg-amber-50/5/10 border border-zinc-200 rounded-2xl p-4 md:p-6 shadow-sm">
+                <div className="bg-amber-50/5 border border-zinc-200 rounded-2xl p-2.5 sm:p-4 md:p-6 shadow-sm">
                   <CactusAdventureGame />
                 </div>
               </div>
